@@ -1,32 +1,40 @@
 from web_app import db
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Devices(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ser_num = db.Column(db.Text, index=True)
-    app_num = db.Column(db.Text, index=True)
-    modification = db.Column(db.Text, index=True)
-    date = db.Column(db.DateTime, index=True)
+    serial_number = db.Column(db.Text, index=True)
+    order_number = db.Column(db.Text, index=True)
+    modification = db.Column(db.Text)
+    delivery_date = db.Column(db.DateTime)
 
     def __repr__(self):
-        return f'id - {self.id}, ser_num - {self.ser_num}, app_num - {self.app_num}'
+        return f'id - {self.id}, serial_number - {self.serial_number}, order_number - {self.order_number}'
 
 
-class Users(db.Model):
+class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.Text, index=True)
-    post = db.Column(db.Text, index=True)
-    email = db.Column(db.Text, index=True)
+    employee_position = db.Column(db.Text)
+    email = db.Column(db.Text)
     password_hash = db.Column(db.Text, index=True)
 
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
     def __repr__(self):
-        return f'id - {self.id}, user_name - {self.user_name}, post - {self.post}'
+        return f'id - {self.id}, user_name - {self.user_name}, employee_position - {self.employee_position}'
 
 
 class WorkStatus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_device = db.Column(db.Integer, db.ForeignKey(Devices.id))
-    work_status = db.Column(db.Text, index=True)
+    work_status = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey(Users.id))
 
     def __repr__(self):
@@ -34,10 +42,14 @@ class WorkStatus(db.Model):
 
 
 class UserData(db.Model):
+    """
+        Модель для хранения данных, вносимых пользователем в ходе работ
+    """
+    # Стоит ли писать коменты моделей баз данных?
     id = db.Column(db.Integer, primary_key=True)
     id_work = db.Column(db.Integer, db.ForeignKey(WorkStatus.id))
-    base_name = db.Column(db.Text, index=True)
-    path = db.Column(db.Text, index=True)
+    base_name = db.Column(db.Text)
+    path = db.Column(db.Text)
 
     def __repr__(self):
         return f'id - {self.id}, base_name - {self.base_name}, path - {self.path}'
@@ -46,8 +58,8 @@ class UserData(db.Model):
 class Protocols(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_work = db.Column(db.Integer, db.ForeignKey(WorkStatus.id))
-    protocol_name = db.Column(db.Text, index=True)
-    path = db.Column(db.Text, index=True)
+    protocol_name = db.Column(db.Text)
+    path = db.Column(db.Text)
 
     def __repr__(self):
         return f'id - {self.id}, protocol_name - {self.protocol_name}, path - {self.path}'
@@ -55,7 +67,7 @@ class Protocols(db.Model):
 
 class WorkType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    work_type_name = db.Column(db.Text, index=True)
+    work_type_name = db.Column(db.Text)
 
     def __repr__(self):
         return f'id - {self.id}, work_type_name - {self.work_type_name}'
@@ -64,8 +76,7 @@ class WorkType(db.Model):
 class Scripts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_wt = db.Column(db.Integer, db.ForeignKey(WorkType.id))
-    script_name = db.Column(db.Text, index=True)
-    path = db.Column(db.Text, index=True)
+    script_name = db.Column(db.Text)
 
     def __repr__(self):
         return f'id - {self.id}, script_name - {self.script_name}, path - {self.path}'
