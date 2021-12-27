@@ -12,7 +12,7 @@ class Devices(db.Model):
     modification = db.Column(db.Text)
     delivery_date = db.Column(db.DateTime)
 
-    work_status = relationship('WorkStatus')
+    work_status = relationship('WorkStatus', lazy="joined")
 
     def __repr__(self):
         return f'id - {self.id}, serial_number - {self.serial_number}, order_number - {self.order_number}'
@@ -22,7 +22,7 @@ class PositionsEmployees(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     position_name = db.Column(db.Text, unique=True)
 
-    users = relationship("Users")
+    users = relationship("Users", lazy="joined")
 
     def __repr__(self):
         return f'id - {self.id}, position_name - {self.position_name}'
@@ -35,8 +35,8 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.Text)
     password_hash = db.Column(db.Text, index=True)
 
-    work_status = relationship("WorkStatus")
-    access_rights = relationship("AccessRigths")
+    work_status = relationship("WorkStatus", lazy="joined")
+    access_rights = relationship("AccessRights", lazy="joined")
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -54,8 +54,8 @@ class WorkStatus(db.Model):
     work_status = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey(Users.id))
 
-    user_data = relationship("UserData")
-    protocols = relationship("Protocols")
+    user_data = relationship("UserData", lazy="joined")
+    protocols = relationship("Protocols", lazy="joined")
 
     def __repr__(self):
         return f'id - {self.id}, work_status - {self.work_status}'
@@ -88,7 +88,7 @@ class WorkType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     work_type_name = db.Column(db.Text)
 
-    scripts = relationship("Scripts")
+    scripts = relationship("Scripts", lazy="joined")
 
     def __repr__(self):
         return f'id - {self.id}, work_type_name - {self.work_type_name}'
@@ -99,13 +99,13 @@ class Scripts(db.Model):
     id_wt = db.Column(db.Integer, db.ForeignKey(WorkType.id))
     script_name = db.Column(db.Text)
 
-    access_rigths = relationship("AccessRigths")
+    access_rights = relationship("AccessRights", lazy="joined")
 
     def __repr__(self):
         return f'id - {self.id}, script_name - {self.script_name}, path - {self.path}'
 
 
-class AccessRigths(db.Model):
+class AccessRights(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_user = db.Column(db.Integer, db.ForeignKey(Users.id))
     id_script = db.Column(db.Integer, db.ForeignKey(Scripts.id))
