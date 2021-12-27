@@ -1,6 +1,8 @@
 from web_app import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.orm import relationship
+from sqlalchemy import ForeignKey
 
 
 class Devices(db.Model):
@@ -10,16 +12,31 @@ class Devices(db.Model):
     modification = db.Column(db.Text)
     delivery_date = db.Column(db.DateTime)
 
+    work_status = relationship('WorkStatus')
+
     def __repr__(self):
         return f'id - {self.id}, serial_number - {self.serial_number}, order_number - {self.order_number}'
 
 
+class PositionsEmployees(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    position_name = db.Column(db.Text, unique=True)
+
+    users = relationship("Users")
+
+    def __repr__(self):
+        return f'id - {self.id}, position_name - {self.position_name}'
+
+
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.Text, index=True)
-    employee_position = db.Column(db.Text)
+    user_name = db.Column(db.Text, index=True, unique=True)
+    id_employee_position = db.Column(db.Integer, ForeignKey(PositionsEmployees.id))
     email = db.Column(db.Text)
     password_hash = db.Column(db.Text, index=True)
+
+    work_status = relationship("WorkStatus")
+    access_rights = relationship("AccessRigths")
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -37,6 +54,9 @@ class WorkStatus(db.Model):
     work_status = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey(Users.id))
 
+    user_data = relationship("UserData")
+    protocols = relationship("Protocols")
+
     def __repr__(self):
         return f'id - {self.id}, work_status - {self.work_status}'
 
@@ -45,7 +65,6 @@ class UserData(db.Model):
     """
         Модель для хранения данных, вносимых пользователем в ходе работ
     """
-    # Стоит ли писать коменты моделей баз данных?
     id = db.Column(db.Integer, primary_key=True)
     id_work = db.Column(db.Integer, db.ForeignKey(WorkStatus.id))
     base_name = db.Column(db.Text)
@@ -69,6 +88,8 @@ class WorkType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     work_type_name = db.Column(db.Text)
 
+    scripts = relationship("Scripts")
+
     def __repr__(self):
         return f'id - {self.id}, work_type_name - {self.work_type_name}'
 
@@ -77,6 +98,8 @@ class Scripts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_wt = db.Column(db.Integer, db.ForeignKey(WorkType.id))
     script_name = db.Column(db.Text)
+
+    access_rigths = relationship("AccessRigths")
 
     def __repr__(self):
         return f'id - {self.id}, script_name - {self.script_name}, path - {self.path}'
@@ -89,3 +112,5 @@ class AccessRigths(db.Model):
 
     def __repr__(self):
         return f'id - {self.id}, id_user - {self.id_user}, id_script - {self.id_script}'
+
+

@@ -1,17 +1,5 @@
-<html>
-    <head>
-      <title>Заголовок 1</title>
-    </head>
-    <body>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="alert alert-warning" role="alert">
-                {% for message in messages %}
-                    {{ message }}<br>
-                {% endfor %}
-            </div>
-            {% endif %}
-        {% endwith %}
+{% extends "base.html" %}
+{% block content %}
         <h1>Будет выбран скрипт из БД!</h1>
         <form action="" method="post" novalidate>
             {{ form.hidden_tag() }}
@@ -19,5 +7,4 @@
                 {{ form.select() }}
             </p>
         </form>
-    </body>
-</html>
+{% endblock %}

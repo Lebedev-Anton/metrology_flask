@@ -1,17 +1,5 @@
-<html>
-    <head>
-      <title>{{ page_title }}</title>
-    </head>
-    <body>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="alert alert-warning" role="alert">
-                {% for message in messages %}
-                    {{ message }}<br>
-                {% endfor %}
-            </div>
-            {% endif %}
-        {% endwith %}
+{% extends "base.html" %}
+{% block content %}
         <form action="{{ url_for('process_entrance') }}" method="post">
             {{ form.hidden_tag() }}
             <p>
@@ -25,5 +13,4 @@
                 {{ form.submit() }}
             </p>
         </form>
-    </body>
-</html>
+{% endblock %}
