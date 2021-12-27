@@ -24,7 +24,8 @@ def validate_username(form, field):
 @validator
 def validate_password(form, field):
     password = field.data
-    check_status, message = check_password(password)
+    repeated_password = form.repeated_password.data
+    check_status, message = check_password(password, repeated_password)
     return check_status, message
 
 

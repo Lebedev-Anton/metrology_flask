@@ -49,9 +49,12 @@ def check_username(username):
         return True, message
 
 
-def check_password(password):
+def check_password(password, repeated_password):
     if len(password) < 8:
         message = 'Не корректный пароль: пароль должен быть не менее 8 символов'
+        return False, message
+    elif password != repeated_password:
+        message = 'Не корректный пароль: пароли должены совпадать'
         return False, message
     else:
         message = 'Корректный пароль: пароль введен корректно'

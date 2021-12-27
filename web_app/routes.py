@@ -52,7 +52,6 @@ def process_registration():
     if registration_form.validate_on_submit():
         check_status, message = create_new_user(username=registration_form.username.data,
                                                 password=registration_form.password.data,
-                                                repeated_password=registration_form.repeated_password.data,
                                                 employee_position=registration_form.employee_position.data,
                                                 email=registration_form.email.data)
         flash(message)
