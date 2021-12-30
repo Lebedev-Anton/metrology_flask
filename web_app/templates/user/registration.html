@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-        <form action="{{ url_for('process_registration') }}" method="post">
+        <form action="{{ url_for('user.process_registration') }}" method="post">
             {{ form.hidden_tag() }}
             <p>{{ form.username.label }} <br> {{ form.username() }}</p>
             <p>{{ form.password.label }} <br> {{ form.password() }}</p>

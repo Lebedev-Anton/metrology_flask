@@ -1,5 +1,5 @@
 from web_app import db
-from web_app.models import PositionsEmployees, Users
+from web_app.user.models import PositionsEmployees, Users
 
 
 def check_employee_position(employee_position):

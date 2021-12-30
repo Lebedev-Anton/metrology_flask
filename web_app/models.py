@@ -1,8 +1,7 @@
 from web_app import db
-from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
+from web_app.user.models import Users
 
 
 class Devices(db.Model):
@@ -18,41 +17,11 @@ class Devices(db.Model):
         return f'id - {self.id}, serial_number - {self.serial_number}, order_number - {self.order_number}'
 
 
-class PositionsEmployees(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    position_name = db.Column(db.Text, unique=True)
-
-    users = relationship("Users", lazy="joined")
-
-    def __repr__(self):
-        return f'id - {self.id}, position_name - {self.position_name}'
-
-
-class Users(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.Text, index=True, unique=True)
-    id_employee_position = db.Column(db.Integer, ForeignKey(PositionsEmployees.id))
-    email = db.Column(db.Text)
-    password_hash = db.Column(db.Text, index=True)
-
-    work_status = relationship("WorkStatus", lazy="joined")
-    access_rights = relationship("AccessRights", lazy="joined")
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-    def __repr__(self):
-        return f'id - {self.id}, user_name - {self.user_name}, employee_position - {self.employee_position}'
-
-
 class WorkStatus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    id_device = db.Column(db.Integer, db.ForeignKey(Devices.id))
+    id_device = db.Column(db.Integer, ForeignKey(Devices.id))
     work_status = db.Column(db.Text)
-    user_id = db.Column(db.Integer, db.ForeignKey(Users.id))
+    user_id = db.Column(db.Integer, ForeignKey(Users.id))
 
     user_data = relationship("UserData", lazy="joined")
     protocols = relationship("Protocols", lazy="joined")
@@ -66,7 +35,7 @@ class UserData(db.Model):
         Модель для хранения данных, вносимых пользователем в ходе работ
     """
     id = db.Column(db.Integer, primary_key=True)
-    id_work = db.Column(db.Integer, db.ForeignKey(WorkStatus.id))
+    id_work = db.Column(db.Integer, ForeignKey(WorkStatus.id))
     base_name = db.Column(db.Text)
     path = db.Column(db.Text)
 
@@ -99,16 +68,19 @@ class Scripts(db.Model):
     id_wt = db.Column(db.Integer, db.ForeignKey(WorkType.id))
     script_name = db.Column(db.Text)
 
-    access_rights = relationship("AccessRights", lazy="joined")
+    work_type = relationship("WorkType", lazy="joined")
 
     def __repr__(self):
-        return f'id - {self.id}, script_name - {self.script_name}, path - {self.path}'
+        return f'id - {self.id}, script_name - {self.script_name}'
 
 
 class AccessRights(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    id_user = db.Column(db.Integer, db.ForeignKey(Users.id))
-    id_script = db.Column(db.Integer, db.ForeignKey(Scripts.id))
+    id_user = db.Column(db.Integer, ForeignKey(Users.id))
+    id_script = db.Column(db.Integer, ForeignKey(Scripts.id))
+
+    user = relationship('Users', lazy="joined")
+    script = relationship('Scripts', lazy="joined")
 
     def __repr__(self):
         return f'id - {self.id}, id_user - {self.id_user}, id_script - {self.id_script}'

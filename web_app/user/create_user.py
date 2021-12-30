@@ -1,5 +1,5 @@
 from web_app import app, db
-from web_app.models import Users, PositionsEmployees
+from web_app.user.models import Users, PositionsEmployees
 
 
 def create_new_user(username, password, employee_position, email):

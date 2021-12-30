@@ -10,8 +10,8 @@
         <div>
             Меню:
             <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('entrance') }}">Login</a>
-            <a href="{{ url_for('logout') }}">Выйти</a>
+            <a href="{{ url_for('user.entrance') }}">Login</a>
+            <a href="{{ url_for('user.logout') }}">Выйти</a>
         </div>
         <hr>
         {% with messages = get_flashed_messages() %}

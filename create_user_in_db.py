@@ -1,5 +1,5 @@
-from web_app import db
-from web_app.models import Users, PositionsEmployees
+from web_app import db, app
+from web_app.user.models import Users, PositionsEmployees
 
 
 def create_positions(list_positions):
@@ -18,7 +18,18 @@ def create_user(user_name, position, email, password):
     db.session.commit()
 
 
-positions = ['Начальник лаборатори', 'Начальник сектора', 'Поверитель']
+def update_user(username):
+    user = Users.query.filter_by(id=23).first()
+    user.user_name = username
+    db.session.commit()
+
+
+def get_user_position():
+    user = Users.query.filter_by(id=23).first()
+    print(user.position.position_name)
+
+
+positions = ['Начальник лаборатории', 'Начальник сектора', 'Поверитель']
 
 create_positions(positions)
 
