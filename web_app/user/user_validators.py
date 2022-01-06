@@ -1,15 +1,15 @@
-from web_app.user.decorators import validator
+from web_app.user.decorators import form_field_validator
 from web_app.custom_validators import check_username, check_password, check_email_correctness, check_employee_position
 
 
-@validator
+@form_field_validator
 def validate_username(form, field):
     username = field.data
     check_status, message = check_username(username)
     return check_status, message
 
 
-@validator
+@form_field_validator
 def validate_password(form, field):
     password = field.data
     repeated_password = form.repeated_password.data
@@ -17,14 +17,14 @@ def validate_password(form, field):
     return check_status, message
 
 
-@validator
+@form_field_validator
 def validate_employee_position(form, field):
     employee_position = field.data
     check_status, message = check_employee_position(employee_position)
     return check_status, message
 
 
-@validator
+@form_field_validator
 def validate_email(form, field):
     user_email = field.data
     check_status, message = check_email_correctness(user_email)

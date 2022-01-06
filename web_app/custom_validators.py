@@ -7,35 +7,40 @@ def check_employee_position(employee_position):
     allowed_positions = [position[0] for position in positions_from_db]
     if employee_position in allowed_positions:
         message = 'Корректная должнность: должность указана корректна'
-        return True, message
+        is_valid = True
     else:
         message = 'Некорректная должность: такой должнности не сущестует'
-        return False, message
+        is_valid = False
+    return is_valid, message
+
+
+def check_commercial_at(user_email):
+    return not ('@' in user_email)
+
+
+def check_domain_name(user_email):
+    domain_name = user_email.split('@')[1]
+    return not ('.' in domain_name)
+
+
+def check_spaces_in_mail(user_email):
+    return ' ' in user_email
 
 
 def check_email_correctness(user_email):
-    def check_commercial_at():
-        return not ('@' in user_email)
-
-    def check_domain_name():
-        domain_name = user_email.split('@')[1]
-        return not ('.' in domain_name)
-
-    def check_spaces_in_mail():
-        return ' ' in user_email
-
-    if check_commercial_at():
+    if check_commercial_at(user_email):
         message = 'Некорректный email: не указан @'
-        return False, message
-    elif check_domain_name():
+        is_valid = False
+    elif check_domain_name(user_email):
         message = 'Некорректный email: ошибка в домене'
-        return False, message
-    elif check_spaces_in_mail():
+        is_valid = False
+    elif check_spaces_in_mail(user_email):
         message = 'Некорректный email: обнаружены лишние пробелы'
-        return False, message
+        is_valid = False
     else:
         message = 'Корректный email'
-        return True, message
+        is_valid = True
+    return is_valid, message
 
 
 def check_username(username):
@@ -43,19 +48,21 @@ def check_username(username):
     users = [user[0] for user in users_from_db]
     if username in users:
         message = 'Некоректное имя пользователя: такое имя пользователя уже существует'
-        return False, message
+        is_valid = False
     else:
         message = 'Корректное имя пользователя: имя пользователя корректно'
-        return True, message
+        is_valid = True
+    return is_valid, message
 
 
 def check_password(password, repeated_password):
     if len(password) < 8:
         message = 'Не корректный пароль: пароль должен быть не менее 8 символов'
-        return False, message
+        is_valid = False
     elif password != repeated_password:
         message = 'Не корректный пароль: пароли должены совпадать'
-        return False, message
+        is_valid = False
     else:
         message = 'Корректный пароль: пароль введен корректно'
-        return True, message
+        is_valid = True
+    return is_valid, message

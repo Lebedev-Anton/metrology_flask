@@ -13,18 +13,12 @@ log = logging.getLogger("flask-admin.sqla")
 
 class UserView(ModelView):
     form = RegistrationForm
-
     column_list = (Users.user_name, Users.email, 'position.position_name')
-
     column_labels = dict(user_name='Имя пользователя', email='Email')
     column_labels['position.position_name'] = 'Должность сотрудника'
-
     column_searchable_list = ('user_name', 'position.position_name')
-
     column_sortable_list = ('user_name', 'email', 'position.position_name')
-
     create_template = 'admin/create_user.html'
-
     edit_template = 'admin/edit_user.html'
 
     def is_accessible(self):
