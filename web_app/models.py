@@ -4,12 +4,24 @@ from sqlalchemy import ForeignKey
 from web_app.user.models import Users
 
 
+class WorkType(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    work_type_name = db.Column(db.Text)
+
+    scripts = relationship("Scripts", lazy="joined")
+    access = relationship("AccessRights", lazy="joined")
+
+    def __repr__(self):
+        return f'id - {self.id}, work_type_name - {self.work_type_name}'
+
+
 class Devices(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     serial_number = db.Column(db.Text, index=True)
     order_number = db.Column(db.Text, index=True)
     modification = db.Column(db.Text)
     delivery_date = db.Column(db.DateTime)
+    id_work_type = db.Column(db.Integer, ForeignKey(WorkType.id))
 
     work_status = relationship('WorkStatus', lazy="joined")
 
@@ -53,16 +65,6 @@ class Protocols(db.Model):
         return f'id - {self.id}, protocol_name - {self.protocol_name}, path - {self.path}'
 
 
-class WorkType(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    work_type_name = db.Column(db.Text)
-
-    scripts = relationship("Scripts", lazy="joined")
-
-    def __repr__(self):
-        return f'id - {self.id}, work_type_name - {self.work_type_name}'
-
-
 class Scripts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_wt = db.Column(db.Integer, db.ForeignKey(WorkType.id))
@@ -77,12 +79,12 @@ class Scripts(db.Model):
 class AccessRights(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_user = db.Column(db.Integer, ForeignKey(Users.id))
-    id_script = db.Column(db.Integer, ForeignKey(Scripts.id))
+    id_work_type = db.Column(db.Integer, ForeignKey(WorkType.id))
 
     user = relationship('Users', lazy="joined")
-    script = relationship('Scripts', lazy="joined")
+    work_type = relationship('WorkType', lazy="joined")
 
     def __repr__(self):
-        return f'id - {self.id}, id_user - {self.id_user}, id_script - {self.id_script}'
+        return f'id - {self.id}, id_user - {self.id_user}, id_work_type - {self.id_work_type}'
 
 

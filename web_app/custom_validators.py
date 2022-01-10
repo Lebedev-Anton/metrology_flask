@@ -44,7 +44,7 @@ def check_email_correctness(user_email):
 
 
 def check_username(username):
-    users_from_db = db.session.query(Users.user_name).all()
+    users_from_db = db.session.query(Users.username).all()
     users = [user[0] for user in users_from_db]
     if username in users:
         message = 'Некоректное имя пользователя: такое имя пользователя уже существует'

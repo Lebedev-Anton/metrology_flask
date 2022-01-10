@@ -1,0 +1,11 @@
+{% extends 'admin/model/edit.html' %}
+{% block brand %}
+    Edit {{ admin_view.name|capitalize }}
+{% endblock %}
+
+{% block body %}
+    {% call lib.form_tag(form) %}
+        {{ lib.render_form_fields(form, form_opts=form_opts) }}
+        {{ lib.render_form_buttons(return_url) }}
+    {% endcall %}
+{% endblock %}

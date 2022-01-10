@@ -17,7 +17,7 @@ class PositionsEmployees(db.Model):
 
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.Text, index=True, unique=True)
+    username = db.Column(db.Text, index=True, unique=True)
     id_employee_position = db.Column(db.Integer, ForeignKey(PositionsEmployees.id))
     email = db.Column(db.Text)
     password_hash = db.Column(db.Text, index=True)
@@ -51,4 +51,4 @@ class Users(db.Model, UserMixin):
         return self.id_employee_position == id_position
 
     def __repr__(self):
-        return f'id - {self.id}, user_name - {self.user_name}'
+        return f'id - {self.id}, username - {self.username}, email - {self.email}'

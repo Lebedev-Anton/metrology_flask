@@ -21,7 +21,7 @@ def entrance():
 def process_entrance():
     entrance_form = EntranceForm()
     if entrance_form.validate_on_submit():
-        user = Users.query.filter_by(user_name=entrance_form.username.data).first()
+        user = Users.query.filter_by(username=entrance_form.username.data).first()
         if user and user.check_password(entrance_form.password.data):
             login_user(user)
             flash('Вы вошли на сайт')
