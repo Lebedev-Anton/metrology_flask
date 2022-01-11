@@ -27,32 +27,23 @@ def update_user(username):
 
 def get_user_position():
     user = Users.query.filter_by(id=23).first()
-    print(user.position.position_name)
 
 
 def get_work_types(model):
     id_user = model.id
-    print(id_user)
-    # id_scripts = AccessRights.query.filter_by(AccessRights.id_user == id_user).all()
     work_types_from_db = db.session.query(WorkType.work_type_name).\
         join(AccessRights).filter(AccessRights.id_user == id_user).all()
     work_types = []
     for work_type in work_types_from_db:
         work_types.append(str(work_type[0]))
-    print(work_types)
 
-# positions = ['Начальник лаборатории', 'Начальник сектора', 'Поверитель']
-#
-# save_positions_to_db(positions)
-#
-# save_user_to_db('Вася', 'Начальник лаборатори', 'vasya@mail.ru', '12345678')
-# save_user_to_db('Петя', 'Начальник сектора', 'petya@mail.ru', '12345678')
-# save_user_to_db('Коля', 'Поверитель', 'Kolya@mail.ru', '12345678')
-# save_user_to_db('Иван', 'Поверитель', 'Ivan@mail.ru', '12345678')
 
-# user = Users.query.filter_by(id=26).first()
-# get_work_types(user)
-id_work_type = 2
-access_rights = AccessRights.query.filter_by(id_work_type=id_work_type).all()
-id_users = [access_right.id_user for access_right in access_rights]
-print(id_users)
+if __name__ == '__main__':
+    positions = ['Начальник лаборатории', 'Начальник сектора', 'Поверитель']
+
+    save_positions_to_db(positions)
+
+    save_user_to_db('Вася', 'Начальник лаборатори', 'vasya@mail.ru', '12345678')
+    save_user_to_db('Петя', 'Начальник сектора', 'petya@mail.ru', '12345678')
+    save_user_to_db('Коля', 'Поверитель', 'Kolya@mail.ru', '12345678')
+    save_user_to_db('Иван', 'Поверитель', 'Ivan@mail.ru', '12345678')

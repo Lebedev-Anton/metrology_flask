@@ -1,5 +1,6 @@
 from web_app import db
 from web_app.user.models import PositionsEmployees, Users
+from web_app.models import Devices, AccessRights
 
 
 def check_employee_position(employee_position):
@@ -65,4 +66,19 @@ def check_password(password, repeated_password):
     else:
         message = 'Корректный пароль: пароль введен корректно'
         is_valid = True
+    return is_valid, message
+
+
+def check_employee_admission(order_number, username):
+    id_work_type = Devices.query.filter_by(order_number=order_number).first().id_work_type
+    access_rights = AccessRights.query.filter_by(id_work_type=id_work_type).all()
+    id_allowed_users = [access_right.id_user for access_right in access_rights]
+    id_user = Users.query.filter_by(username=username).first().id
+    if id_user in id_allowed_users:
+        message = 'Пользователь выбран верно'
+        is_valid = True
+    else:
+        message = 'Не верно выбран пользователь: у выбранного пользователя нет доступа к виду работ'
+        is_valid = False
+
     return is_valid, message

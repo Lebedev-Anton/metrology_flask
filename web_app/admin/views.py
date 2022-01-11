@@ -8,10 +8,11 @@ from web_app.admin.forms import RegistrationForm, EditUserFrom, DevicesForm, Wor
 from flask import flash
 import logging
 from flask_admin.babel import gettext
+
 log = logging.getLogger("flask-admin.sqla")
 
 
-def get_work_type(v, c, m, p):
+def get_work_types(v, c, m, p):
     id_user = m.id
     work_types_from_db = db.session.query(WorkType.work_type_name). \
         join(AccessRights).filter(AccessRights.id_user == id_user).all()
@@ -41,7 +42,6 @@ def get_username(v, c, m, p):
 
 def get_work_status(v, c, m, p):
     id_device = m.id
-    print(id_device)
     try:
         work_status = WorkStatus.query.filter_by(id_device=id_device).first().work_status
     except AttributeError:
@@ -51,7 +51,6 @@ def get_work_status(v, c, m, p):
 
 class UserView(ModelView):
     form = RegistrationForm
-    # column_hide_backrefs = False
     column_list = (Users.username, Users.email, 'position.position_name', 'access_rights')
     column_labels = dict(username='Имя пользователя', email='Email')
     column_labels['position.position_name'] = 'Должность сотрудника'
@@ -61,7 +60,7 @@ class UserView(ModelView):
     create_template = 'admin/create_user.html'
     edit_template = 'admin/edit_user.html'
 
-    column_formatters = dict(access_rights=get_work_type)
+    column_formatters = dict(access_rights=get_work_types)
 
     def is_accessible(self):
         return current_user.is_head_of_laboratory
@@ -155,6 +154,11 @@ class DevicesView(ModelView):
     column_labels['work_status.work_status'] = 'Статус работ'
 
     column_formatters = {'work_status.work_status': get_work_status}
+
+    column_searchable_list = ('serial_number', 'order_number', 'modification', 'delivery_date',
+                              'work_status.work_status')
+    column_sortable_list = ('serial_number', 'order_number', 'modification', 'delivery_date',
+                            'work_status.work_status')
 
     def is_accessible(self):
         return current_user.is_head_of_laboratory

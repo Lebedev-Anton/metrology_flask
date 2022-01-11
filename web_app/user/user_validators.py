@@ -1,5 +1,6 @@
 from web_app.user.decorators import form_field_validator
-from web_app.custom_validators import check_username, check_password, check_email_correctness, check_employee_position
+from web_app.custom_validators import check_username, check_password, check_email_correctness, check_employee_position,\
+    check_employee_admission
 from web_app.models import AccessRights, Devices
 from web_app.user.models import Users
 
@@ -36,19 +37,6 @@ def validate_email(form, field):
 @form_field_validator
 def validate_responsible_user(form, field):
     order_number = form.order_number.data
-    print(order_number)
-    id_work_type = Devices.query.filter_by(order_number=order_number).first().id_work_type
-    print(id_work_type)
-    access_rights = AccessRights.query.filter_by(id_work_type=id_work_type).all()
-    id_allowed_users = [access_right.id_user for access_right in access_rights]
     username = field.data
-    id_user = Users.query.filter_by(username=username).first().id
-    print(id_user, id_allowed_users)
-    if id_user in id_allowed_users:
-        message = 'Пользователь выбран верно'
-        check_status = True
-    else:
-        message = 'Не верно выбран пользхователь: у выбранного пользователя нет доступа к виду работ'
-        check_status = False
-
+    check_status, message = check_employee_admission(order_number, username)
     return check_status, message
