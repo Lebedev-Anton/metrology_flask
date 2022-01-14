@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
         <h1>Будет выбран скрипт из БД!</h1>
-        <form action="" method="post" novalidate>
+        <form action="{{ url_for('script_runner.start_script') }}" method="post" novalidate>
             {{ form.hidden_tag() }}
-            <p>
-                {{ form.select() }}
-            </p>
+            <p>{{ form.script() }}</p>
+            <p>{{ form.order_number() }}</p>
+            <p>{{ form.select() }}</p>
         </form>
 {% endblock %}

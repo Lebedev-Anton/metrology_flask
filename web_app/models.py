@@ -69,6 +69,7 @@ class Scripts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_wt = db.Column(db.Integer, db.ForeignKey(WorkType.id))
     script_name = db.Column(db.Text)
+    path = db.Column(db.Text)
 
     work_type = relationship("WorkType", lazy="joined")
 

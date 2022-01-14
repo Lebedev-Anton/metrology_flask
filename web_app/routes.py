@@ -8,8 +8,7 @@ from web_app.forms import SelectScript
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if current_user.is_authenticated:
-        title = 'Metrology'
         form = SelectScript()
-        return render_template('index.html', title=title, form=form)
+        return render_template('index.html', form=form)
     else:
         return redirect(url_for('user.entrance'))

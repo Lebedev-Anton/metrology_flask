@@ -39,11 +39,18 @@ def get_work_types(model):
 
 
 if __name__ == '__main__':
-    positions = ['Начальник лаборатории', 'Начальник сектора', 'Поверитель']
-
-    save_positions_to_db(positions)
-
-    save_user_to_db('Вася', 'Начальник лаборатори', 'vasya@mail.ru', '12345678')
-    save_user_to_db('Петя', 'Начальник сектора', 'petya@mail.ru', '12345678')
-    save_user_to_db('Коля', 'Поверитель', 'Kolya@mail.ru', '12345678')
-    save_user_to_db('Иван', 'Поверитель', 'Ivan@mail.ru', '12345678')
+    # positions = ['Начальник лаборатории', 'Начальник сектора', 'Поверитель']
+    #
+    # save_positions_to_db(positions)
+    #
+    # save_user_to_db('Вася', 'Начальник лаборатори', 'vasya@mail.ru', '12345678')
+    # save_user_to_db('Петя', 'Начальник сектора', 'petya@mail.ru', '12345678')
+    # save_user_to_db('Коля', 'Поверитель', 'Kolya@mail.ru', '12345678')
+    # save_user_to_db('Иван', 'Поверитель', 'Ivan@mail.ru', '12345678')
+    # from web_app.models import WorkStatus, Devices
+    #
+    # work_types = WorkStatus.query(WorkStatus.work_status).filter_by(user_id=26).all()
+    # work_types = db.session.query(Devices.order_number).join(WorkStatus).filter(WorkStatus.user_id == 26).all()
+    # for work_type in work_types:
+    #     print(work_type)
+    print(dict({'choise': 'Нет', 'submit': 'True'}))

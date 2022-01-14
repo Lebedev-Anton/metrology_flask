@@ -34,7 +34,7 @@ def process_entrance():
 def registration():
     title = 'Регистрация'
     registration_form = RegistrationForm()
-    return render_template('user/create_user.html', title=title, form=registration_form)
+    return render_template('user/registration.html', title=title, form=registration_form)
 
 
 @blueprint.route('/process-registration', methods=['POST'])
