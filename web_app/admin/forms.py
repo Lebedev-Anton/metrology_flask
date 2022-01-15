@@ -10,11 +10,8 @@ from web_app.user.user_validators import \
     validate_email, validate_username, validate_password, validate_employee_position, validate_responsible_user
 
 
-class RegistrationForm(FlaskForm):
-    username = StringField('Введите имя пользователя', validators=[DataRequired(), validate_username])
-    password = PasswordField('Введите пароль', validators=[DataRequired(), validate_password])
-    repeated_password = PasswordField('Повторите пароль', validators=[DataRequired(), validate_password])
-
+class EditUserFrom(FlaskForm):
+    username = StringField('Введите имя пользователя', validators=[DataRequired()])
     positions_from_db = db.session.query(PositionsEmployees.position_name).all()
     allowed_position = [position[0] for position in positions_from_db]
     employee_position = SelectField('Введите должность', validators=[DataRequired(), validate_employee_position],
@@ -29,22 +26,10 @@ class RegistrationForm(FlaskForm):
     email = EmailField('Введите email', validators=[DataRequired(), validate_email])
 
 
-class EditUserFrom(FlaskForm):
-    username = StringField('Введите имя пользователя', validators=[DataRequired()])
-
-    positions_from_db = db.session.query(PositionsEmployees.position_name).all()
-    allowed_position = [position[0] for position in positions_from_db]
-    employee_position = SelectField('Введите должность', validators=[DataRequired(), validate_employee_position],
-                                    choices=allowed_position)
-
-    work_types_from_db = db.session.query(WorkType.work_type_name). \
-        join(AccessRights).all()
-    work_types = set()
-    for work_type in work_types_from_db:
-        work_types.add(str(work_type[0]))
-    allowed_work_types = SelectMultipleField('Выберете допустимые виды работ', choices=work_types)
-
-    email = EmailField('Введите email', validators=[DataRequired(), validate_email])
+class RegistrationForm(EditUserFrom):
+    username = StringField('Введите имя пользователя', validators=[DataRequired(), validate_username])
+    password = PasswordField('Введите пароль', validators=[DataRequired(), validate_password])
+    repeated_password = PasswordField('Повторите пароль', validators=[DataRequired(), validate_password])
 
 
 class DevicesForm(FlaskForm):
