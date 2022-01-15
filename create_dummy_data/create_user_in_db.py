@@ -53,4 +53,4 @@ if __name__ == '__main__':
     # work_types = db.session.query(Devices.order_number).join(WorkStatus).filter(WorkStatus.user_id == 26).all()
     # for work_type in work_types:
     #     print(work_type)
-    print(dict({'choise': 'Нет', 'submit': 'True'}))
+    print(dict({'choise': 'Да', 'submit': 'True'}))

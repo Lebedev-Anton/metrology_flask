@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+        <form action="{{ url_for('script.processing_show_number', choice=choice,
+         checked_point_id=checked_point_id, path=path) }}" method="post">
+            {{ form.hidden_tag() }}
+            <p>{{ message }}</p>
+            <p>{{ form.number() }}</p>
+            <p>{{ form.submit() }}</p>
+        </form>
+{% endblock %}

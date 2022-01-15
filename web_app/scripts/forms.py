@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, SelectField
+from wtforms import SubmitField, SelectField, DecimalField
 from wtforms.validators import DataRequired
 
 
@@ -12,4 +12,9 @@ class ShowQuestionForm(FlaskForm):
         super().__init__(**kwargs)
         self.choice.choices = user_choice.split(';')
     choice = SelectField(validators=[DataRequired()])
+    submit = SubmitField('Ок')
+
+
+class ShowNumberForm(FlaskForm):
+    number = DecimalField(validators=[DataRequired()])
     submit = SubmitField('Ок')

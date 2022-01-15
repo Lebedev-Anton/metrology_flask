@@ -1,7 +1,7 @@
 from flask import render_template, url_for, redirect, flash
 from flask_login import current_user, login_user
 from web_app import db
-from web_app.scripts.forms import ShowMessageForm, ShowQuestionForm
+from web_app.scripts.forms import ShowMessageForm, ShowQuestionForm, ShowNumberForm
 from web_app.script_runner.models import CheckedPointData
 
 from flask import Blueprint
@@ -24,6 +24,7 @@ def processing_show_message(checked_point_id, path):
     checked_point_data = CheckedPointData.query.filter_by(
         id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
     checked_point_data.user_answer = submit
+    checked_point_data.status = 'done'
     db.session.commit()
     return redirect(url_for('script_runner.run_script', checked_point_id=checked_point_id, path=path))
 
@@ -42,9 +43,33 @@ def processing_show_question(choice, checked_point_id, path):
     form = ShowQuestionForm(choice)
     choice = str(form.choice.data)
     submit = str(form.submit.data)
-    user_answer = str({'choise': choice, 'submit': submit})
+    user_answer = str({'choice': choice, 'submit': submit})
     checked_point_data = CheckedPointData.query.filter_by(
         id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
     checked_point_data.user_answer = user_answer
+    checked_point_data.status = 'done'
+    db.session.commit()
+    return redirect(url_for('script_runner.run_script', checked_point_id=checked_point_id, path=path))
+
+
+@blueprint.route('/show_number/<message>-<checked_point_id>-<path>')
+def show_number(message, checked_point_id, path):
+    if current_user.is_authenticated:
+        form = ShowNumberForm()
+        return render_template('scripts/show_number.html', message=message,
+                               form=form, checked_point_id=checked_point_id, path=path)
+    return redirect(url_for('index'))
+
+
+@blueprint.route('/process-show_number/<checked_point_id>-<path>', methods=['POST'])
+def processing_show_number(checked_point_id, path):
+    form = ShowNumberForm()
+    number = str(form.number.data)
+    submit = str(form.submit.data)
+    user_answer = str({'number': number, 'submit': submit})
+    checked_point_data = CheckedPointData.query.filter_by(
+        id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
+    checked_point_data.user_answer = user_answer
+    checked_point_data.status = 'done'
     db.session.commit()
     return redirect(url_for('script_runner.run_script', checked_point_id=checked_point_id, path=path))

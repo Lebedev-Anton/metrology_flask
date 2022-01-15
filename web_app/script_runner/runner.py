@@ -2,6 +2,8 @@ import importlib
 import os
 from web_app import db
 from web_app.script_runner.models import CheckedPoint, CheckedPointData
+from flask import redirect, url_for
+from web_app.forms import SelectScript
 
 
 def dynamic_import(module):
@@ -36,60 +38,68 @@ def run_checked_point(user_id, work_id, path):
     checked_point_in_progress = CheckedPoint.query.filter_by(id_work=work_id, status='in progress').order_by(
         CheckedPoint.id.asc()).first()
     if checked_point_in_progress:
-        return run_in_progress_checked_point(checked_point_in_progress, path)
+        return selection_checked_point(checked_point_in_progress, path, 'in progress')
 
     checked_point_in_backlog = CheckedPoint.query.filter_by(id_work=work_id, status='backlog').order_by(
         CheckedPoint.id.asc()).first()
     if checked_point_in_backlog:
-        return run_backlog_checked_point(checked_point_in_backlog, path)
+        return selection_checked_point(checked_point_in_backlog, path, 'backlog')
 
     return stop_script()
 
 
-def run_in_progress_checked_point(checked_point, path):
+def get_script_functions(path):
+    path_of_script_functions = path + '.functions'
+    return dynamic_import(path_of_script_functions)
+
+
+def isLastMethodInProgress(checked_point_id):
+    return CheckedPointData.query.filter_by(status='in progress', id_checked_point=checked_point_id).all()
+
+
+def selection_checked_point(checked_point, path, type_selection):
+    print(type_selection)
     checked_point_id = checked_point.id
     checked_point_name = checked_point.checked_point_name
 
-    path_of_functions_for_checked_point = path + '.functions'
-    functions_for_checked_point = dynamic_import(path_of_functions_for_checked_point)
+    script_functions = get_script_functions(path)
 
-    current_function = getattr(functions_for_checked_point, checked_point_name)
-    next_method = db.session.query(CheckedPointData.next_method).filter(
-        CheckedPointData.id_checked_point == checked_point_id).order_by(CheckedPointData.id.desc()).first()[0]
+    current_function = getattr(script_functions, checked_point_name)
+    print(current_function)
+    if type_selection == 'backlog':
+        print(1)
+        next_method = current_function(checked_point_id, path).start_method
+    else:
+        if isLastMethodInProgress(checked_point_id):
+            print(2)
+            in_progress_method = CheckedPointData.query.filter_by(
+                status='in progress', id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
+            next_method = in_progress_method.current_method
+            db.session.delete(in_progress_method)
+        else:
+            print(3)
+            next_method = db.session.query(CheckedPointData.next_method).filter(
+                CheckedPointData.id_checked_point == checked_point_id).order_by(CheckedPointData.id.desc()).first()[0]
     print(next_method)
-    checked_point_data = CheckedPointData(current_method=next_method, id_checked_point=checked_point_id)
+
+    checked_point_data = CheckedPointData(current_method=next_method,
+                                          id_checked_point=checked_point_id, status='in progress')
     db.session.add(checked_point_data)
-    db.session.commit()
+
     point_in_progress = CheckedPoint.query.filter_by(id=checked_point_id).first()
     point_in_progress.status = 'in progress'
     db.session.commit()
     return getattr(current_function(checked_point_id, path), next_method)()
 
 
-def run_backlog_checked_point(checked_point, path):
-    checked_point_id = checked_point.id
-    checked_point_name = checked_point.checked_point_name
-
-    path_of_functions_for_checked_point = path + '.functions'
-    functions_for_checked_point = dynamic_import(path_of_functions_for_checked_point)
-
-    start_function = getattr(functions_for_checked_point, checked_point_name)
-    current_method = start_function(checked_point_id, path).start_method
-    checked_point_data = CheckedPointData(current_method=current_method, id_checked_point=checked_point_id)
-    db.session.add(checked_point_data)
-    db.session.commit()
-
-    point_in_progress = CheckedPoint.query.filter_by(id=checked_point_id).first()
-    point_in_progress.status = 'in progress'
-    db.session.commit()
-    return getattr(start_function(checked_point_id, path), current_method)()
-
-
 def stop_script():
-    print('СКРИПТ ВЫПОЛНЕН!!!!!!!!!!!!!')
+    form = SelectScript()
+    return redirect(url_for('index', form=form))
 
 
 if __name__ == '__main__':
-    path = 'web_app.scripts.breathalyzer.dingo_49499_12'
-    # pars_tree(path, work_id=14)
-    run_checked_point(1, 14, path)
+    next_method = CheckedPointData.query.filter_by(
+        status='in progress').order_by(CheckedPointData.id.desc()).first()
+    print(next_method)
+    db.session.delete(next_method)
+    db.session.commit()
