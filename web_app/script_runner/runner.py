@@ -58,29 +58,23 @@ def isLastMethodInProgress(checked_point_id):
 
 
 def selection_checked_point(checked_point, path, type_selection):
-    print(type_selection)
     checked_point_id = checked_point.id
     checked_point_name = checked_point.checked_point_name
 
     script_functions = get_script_functions(path)
 
     current_function = getattr(script_functions, checked_point_name)
-    print(current_function)
     if type_selection == 'backlog':
-        print(1)
         next_method = current_function(checked_point_id, path).start_method
     else:
         if isLastMethodInProgress(checked_point_id):
-            print(2)
             in_progress_method = CheckedPointData.query.filter_by(
                 status='in progress', id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
             next_method = in_progress_method.current_method
             db.session.delete(in_progress_method)
         else:
-            print(3)
             next_method = db.session.query(CheckedPointData.next_method).filter(
                 CheckedPointData.id_checked_point == checked_point_id).order_by(CheckedPointData.id.desc()).first()[0]
-    print(next_method)
 
     checked_point_data = CheckedPointData(current_method=next_method,
                                           id_checked_point=checked_point_id, status='in progress')
@@ -95,11 +89,3 @@ def selection_checked_point(checked_point, path, type_selection):
 def stop_script():
     form = SelectScript()
     return redirect(url_for('index', form=form))
-
-
-if __name__ == '__main__':
-    next_method = CheckedPointData.query.filter_by(
-        status='in progress').order_by(CheckedPointData.id.desc()).first()
-    print(next_method)
-    db.session.delete(next_method)
-    db.session.commit()

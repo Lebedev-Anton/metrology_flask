@@ -96,8 +96,7 @@ class Meas(BaseFunction):
             error = result_number - nominal_value
         else:
             error = (result_number - nominal_value)/nominal_value
-
-        if error < permissible_error:
+        if abs(error) < permissible_error:
             return self.last_method()
         else:
             self.next_method('repeat')

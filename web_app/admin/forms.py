@@ -20,8 +20,7 @@ class RegistrationForm(FlaskForm):
     employee_position = SelectField('Введите должность', validators=[DataRequired(), validate_employee_position],
                                     choices=allowed_position)
 
-    work_types_from_db = db.session.query(WorkType.work_type_name). \
-        join(AccessRights).all()
+    work_types_from_db = db.session.query(WorkType.work_type_name).join(AccessRights).all()
     work_types = set()
     for work_type in work_types_from_db:
         work_types.add(str(work_type[0]))

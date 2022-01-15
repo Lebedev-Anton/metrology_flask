@@ -16,14 +16,17 @@ class EntranceForm(FlaskForm):
 
 
 class RegistrationForm(FlaskForm):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        positions_from_db = db.session.query(PositionsEmployees.position_name).all()
+        allowed_position = [position[0] for position in positions_from_db]
+        self.employee_position.choices = allowed_position
+
     username = StringField('Введите имя пользователя', validators=[DataRequired(), validate_username])
     password = PasswordField('Введите пароль', validators=[DataRequired(), validate_password])
     repeated_password = PasswordField('Повторите пароль', validators=[DataRequired(), validate_password])
 
-    positions_from_db = db.session.query(PositionsEmployees.position_name).all()
-    allowed_position = [position[0] for position in positions_from_db]
-    employee_position = SelectField('Введите должность', validators=[DataRequired(), validate_employee_position],
-                                    choices=allowed_position)
+    employee_position = SelectField('Введите должность', validators=[DataRequired(), validate_employee_position])
 
     email = EmailField('Введите email', validators=[DataRequired(), validate_email])
     submit = SubmitField('Зарегестрироваться')

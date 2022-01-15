@@ -19,5 +19,3 @@ class SelectScript(FlaskForm):
     script = SelectField('Выберете скрипт', validators=[DataRequired()], choices=scripts)
     select = SubmitField('Подтвердить выбор')
     order_number = SelectField('Выберете вид работ', validators=[DataRequired()])
-
-
