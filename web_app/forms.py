@@ -2,7 +2,8 @@ from flask_wtf import FlaskForm
 from flask_login import current_user
 from wtforms import SubmitField, SelectField
 from wtforms.validators import DataRequired
-from web_app.models import Scripts, Devices, WorkStatus
+from web_app.admin.models import Devices, WorkStatus
+from web_app.scripts.models import Scripts
 from web_app import db
 
 

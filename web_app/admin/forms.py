@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, EmailField, SelectField, SelectM
 from wtforms.validators import DataRequired
 
 from web_app import db
-from web_app.models import WorkType, AccessRights
+from web_app.admin.models import WorkType, AccessRights
 from web_app.user.models import PositionsEmployees, Users
 from web_app.user.user_validators import \
     validate_email, validate_username, validate_password, validate_employee_position, validate_responsible_user

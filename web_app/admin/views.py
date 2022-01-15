@@ -2,7 +2,7 @@ from web_app.admin import admin
 from web_app import db
 from flask_admin.contrib.sqla import ModelView
 from web_app.user.models import Users, PositionsEmployees
-from web_app.models import AccessRights, WorkType, Devices, WorkStatus
+from web_app.admin.models import WorkType, Devices, WorkStatus, AccessRights
 from flask_login import current_user
 from web_app.admin.forms import RegistrationForm, EditUserFrom, DevicesForm, WorkStatusForm
 from flask import flash
@@ -36,7 +36,10 @@ def get_delivery_date(v, c, m, p):
 
 def get_username(v, c, m, p):
     user_id = m.user_id
-    username = Users.query.filter_by(id=user_id).first().username
+    try:
+        username = Users.query.filter_by(id=user_id).first().username
+    except AttributeError:
+        username = None
     return username
 
 

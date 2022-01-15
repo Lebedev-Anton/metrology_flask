@@ -14,8 +14,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'user.entrance'
 
-from web_app import routes, models
-from web_app.models import Users
+from web_app.scripts.models import Scripts
+from web_app import routes
+from web_app.user.models import Users
 
 
 @login_manager.user_loader

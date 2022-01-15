@@ -120,5 +120,5 @@ class Result(BaseFunction):
 
     def end_check(self):
         message = 'Поверка завершена'
-        self.next_method('stop_script')
+        self.next_method('last_method')
         return self.show_message(message)

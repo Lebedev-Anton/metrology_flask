@@ -1,7 +1,8 @@
 from flask import render_template, url_for, redirect, flash
 from flask_login import current_user, login_user, logout_user, login_required
 from web_app.forms import SelectScript
-from web_app.models import Scripts, Devices, WorkStatus
+from web_app.admin.models import Devices, WorkStatus
+from web_app.scripts.models import Scripts
 from web_app.script_runner.runner import load_checked_point_in_db, run_checked_point
 from web_app.script_runner.models import CheckedPoint, CheckedPointData
 from web_app import db

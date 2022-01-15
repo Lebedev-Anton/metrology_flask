@@ -1,7 +1,7 @@
 from web_app import db
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
-from web_app.models import WorkStatus
+from web_app.admin.models import WorkStatus
 
 
 class CheckedPoint(db.Model):

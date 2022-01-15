@@ -1,6 +1,7 @@
 from web_app import db
 from web_app.user.models import Users, PositionsEmployees
-from web_app.models import Scripts, AccessRights, WorkType
+from web_app.admin.models import WorkType, AccessRights
+from web_app.scripts.models import Scripts
 
 
 def save_positions_to_db(positions):

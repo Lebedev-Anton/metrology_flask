@@ -1,6 +1,6 @@
 from web_app import db
 from web_app.user.models import PositionsEmployees, Users
-from web_app.models import Devices, AccessRights
+from web_app.admin.models import Devices, AccessRights
 
 
 def check_employee_position(employee_position):

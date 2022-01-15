@@ -6,6 +6,8 @@ from web_app.forms import SelectScript
 
 
 class BaseFunction:
+    start_method = 'start'
+
     def __init__(self, checked_point_id, path):
         self.checked_point_id = checked_point_id
         self.path = path
