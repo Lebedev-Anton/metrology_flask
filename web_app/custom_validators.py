@@ -79,5 +79,5 @@ def check_employee_admission(order_number, username):
     if id_user in id_allowed_users:
         message = 'Пользователь выбран верно'
         is_valid = True
-    
+
     return is_valid, message
