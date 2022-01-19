@@ -4,6 +4,9 @@ from web_app.admin.models import WorkType, AccessRights, Devices, WorkStatus
 from web_app.scripts.models import Scripts
 from config import Config
 
+# Для внесения тестовых данных в базу необходимо выполнить этот скрипт
+# Скрипт выполняется только после создания базы
+
 
 def save_positions_to_db(positions):
     position_dictionary = [{'position_name': position} for position in positions]
