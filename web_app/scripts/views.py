@@ -1,9 +1,9 @@
-from flask import render_template, url_for, redirect, flash
-from flask_login import current_user, login_user
+from flask import render_template, url_for, redirect
+from flask_login import current_user
 from web_app import db
 from web_app.scripts.forms import ShowMessageForm, ShowQuestionForm, ShowNumberForm
 from web_app.script_runner.models import CheckedPointData
-
+from web_app.script_runner.enums import Status
 from flask import Blueprint
 blueprint = Blueprint('script', __name__, url_prefix='/script')
 
@@ -24,7 +24,7 @@ def processing_show_message(checked_point_id, path):
     checked_point_data = CheckedPointData.query.filter_by(
         id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
     checked_point_data.user_answer = submit
-    checked_point_data.status = 'done'
+    checked_point_data.status = Status.done.value
     db.session.commit()
     return redirect(url_for('script_runner.run_script', checked_point_id=checked_point_id, path=path))
 
@@ -47,7 +47,7 @@ def processing_show_question(choice, checked_point_id, path):
     checked_point_data = CheckedPointData.query.filter_by(
         id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
     checked_point_data.user_answer = user_answer
-    checked_point_data.status = 'done'
+    checked_point_data.status = Status.done.value
     db.session.commit()
     return redirect(url_for('script_runner.run_script', checked_point_id=checked_point_id, path=path))
 
@@ -70,6 +70,6 @@ def processing_show_number(checked_point_id, path):
     checked_point_data = CheckedPointData.query.filter_by(
         id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
     checked_point_data.user_answer = user_answer
-    checked_point_data.status = 'done'
+    checked_point_data.status = Status.done.value
     db.session.commit()
     return redirect(url_for('script_runner.run_script', checked_point_id=checked_point_id, path=path))

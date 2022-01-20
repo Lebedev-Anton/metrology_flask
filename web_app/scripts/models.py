@@ -28,9 +28,6 @@ class Protocols(db.Model):
 
 
 class UserData(db.Model):
-    """
-        Модель для хранения данных, вносимых пользователем в ходе работ
-    """
     id = db.Column(db.Integer, primary_key=True)
     id_work = db.Column(db.Integer, ForeignKey(WorkStatus.id))
     base_name = db.Column(db.Text)

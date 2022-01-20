@@ -1,8 +1,8 @@
 from web_app import db
-from web_app.scripts.forms import ShowMessageForm
 from web_app.script_runner.models import CheckedPointData, CheckedPoint
 from flask import redirect, url_for
 from web_app.forms import SelectScript
+from web_app.script_runner.enums import Status
 
 
 class BaseFunction:
@@ -38,11 +38,11 @@ class BaseFunction:
 
     def last_method(self):
         checked_point = CheckedPoint.query.filter_by(id=self.checked_point_id).first()
-        checked_point.status = 'done'
+        checked_point.status = Status.done.value
 
         checked_point_data = CheckedPointData.query.filter_by(
             id_checked_point=self.checked_point_id).order_by(CheckedPointData.id.desc()).first()
-        checked_point_data.status = 'done'
+        checked_point_data.status = Status.done.value
         db.session.commit()
         return redirect(url_for('script_runner.run_script', checked_point_id=self.checked_point_id, path=self.path))
 
@@ -50,7 +50,7 @@ class BaseFunction:
         checked_point_data = CheckedPointData.query.filter_by(
             id_checked_point=self.checked_point_id, current_method='repeat').order_by(
             CheckedPointData.id.desc()).first()
-        checked_point_data.status = 'done'
+        checked_point_data.status = Status.done.value
         db.session.commit()
         return redirect(url_for('script_runner.run_script', checked_point_id=self.checked_point_id, path=self.path))
 

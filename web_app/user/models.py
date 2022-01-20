@@ -3,6 +3,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
+from web_app.user.enums import EmployeePosition
 
 
 class PositionsEmployees(db.Model):
@@ -35,19 +36,19 @@ class Users(db.Model, UserMixin):
     @property
     def is_head_of_laboratory(self):
         id_position = PositionsEmployees.query.filter(
-            PositionsEmployees.position_name == 'Начальник лаборатории').first().id
+            PositionsEmployees.position_name == EmployeePosition.head_of_laboratory.value).first().id
         return self.id_employee_position == id_position
 
     @property
     def is_head_of_sector(self):
         id_position = PositionsEmployees.query.filter(
-            PositionsEmployees.position_name == 'Начальник сектора').first().id
+            PositionsEmployees.position_name == EmployeePosition.head_of_sector.value).first().id
         return self.id_employee_position == id_position
 
     @property
     def is_inspector(self):
         id_position = PositionsEmployees.query.filter(
-            PositionsEmployees.position_name == 'Поверитель').first().id
+            PositionsEmployees.position_name == EmployeePosition.verifier.value).first().id
         return self.id_employee_position == id_position
 
     def __repr__(self):

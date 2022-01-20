@@ -1,8 +1,6 @@
 from web_app.user.decorators import form_field_validator
 from web_app.custom_validators import check_username, check_password, check_email_correctness, check_employee_position,\
     check_employee_admission
-from web_app.admin.models import Devices, AccessRights
-from web_app.user.models import Users
 
 
 @form_field_validator

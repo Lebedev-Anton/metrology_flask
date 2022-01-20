@@ -4,6 +4,7 @@ from web_app import db
 from web_app.script_runner.models import CheckedPoint, CheckedPointData
 from flask import redirect, url_for
 from web_app.forms import SelectScript
+from web_app.script_runner.enums import Status
 
 
 def dynamic_import(module):
@@ -35,15 +36,15 @@ def load_checked_point_in_db(path, work_id):
 
 
 def run_checked_point(user_id, work_id, path):
-    checked_point_in_progress = CheckedPoint.query.filter_by(id_work=work_id, status='in progress').order_by(
+    checked_point_in_progress = CheckedPoint.query.filter_by(id_work=work_id, status=Status.in_progress.value).order_by(
         CheckedPoint.id.asc()).first()
     if checked_point_in_progress:
-        return selection_checked_point(checked_point_in_progress, path, 'in progress')
+        return selection_checked_point(checked_point_in_progress, path, Status.in_progress.value)
 
-    checked_point_in_backlog = CheckedPoint.query.filter_by(id_work=work_id, status='backlog').order_by(
+    checked_point_in_backlog = CheckedPoint.query.filter_by(id_work=work_id, status=Status.backlog.value).order_by(
         CheckedPoint.id.asc()).first()
     if checked_point_in_backlog:
-        return selection_checked_point(checked_point_in_backlog, path, 'backlog')
+        return selection_checked_point(checked_point_in_backlog, path, Status.backlog.value)
 
     return stop_script()
 
@@ -54,7 +55,7 @@ def get_script_functions(path):
 
 
 def isLastMethodInProgress(checked_point_id):
-    return CheckedPointData.query.filter_by(status='in progress', id_checked_point=checked_point_id).all()
+    return CheckedPointData.query.filter_by(status=Status.in_progress.value, id_checked_point=checked_point_id).all()
 
 
 def selection_checked_point(checked_point, path, type_selection):
@@ -64,12 +65,13 @@ def selection_checked_point(checked_point, path, type_selection):
     script_functions = get_script_functions(path)
 
     current_function = getattr(script_functions, checked_point_name)
-    if type_selection == 'backlog':
+    if type_selection == Status.backlog.value:
         next_method = current_function(checked_point_id, path).start_method
     else:
         if isLastMethodInProgress(checked_point_id):
             in_progress_method = CheckedPointData.query.filter_by(
-                status='in progress', id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
+                status=Status.in_progress.value, id_checked_point=checked_point_id).order_by(
+                CheckedPointData.id.desc()).first()
             next_method = in_progress_method.current_method
             db.session.delete(in_progress_method)
         else:
@@ -77,11 +79,11 @@ def selection_checked_point(checked_point, path, type_selection):
                 CheckedPointData.id_checked_point == checked_point_id).order_by(CheckedPointData.id.desc()).first()[0]
 
     checked_point_data = CheckedPointData(current_method=next_method,
-                                          id_checked_point=checked_point_id, status='in progress')
+                                          id_checked_point=checked_point_id, status=Status.in_progress.value)
     db.session.add(checked_point_data)
 
     point_in_progress = CheckedPoint.query.filter_by(id=checked_point_id).first()
-    point_in_progress.status = 'in progress'
+    point_in_progress.status = Status.in_progress.value
     db.session.commit()
     return getattr(current_function(checked_point_id, path), next_method)()
 
