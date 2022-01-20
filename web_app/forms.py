@@ -14,8 +14,9 @@ class SelectScript(FlaskForm):
             WorkStatus.user_id == current_user.id).all()
         self.order_number.choices = [order_number[0] for order_number in order_numbers]
 
-    scripts_from_db = Scripts.query.all()
-    scripts = [script.script_name for script in scripts_from_db]
-    script = SelectField('Выберете скрипт', validators=[DataRequired()], choices=scripts)
+        scripts_from_db = Scripts.query.all()
+        self.script.choices = [script.script_name for script in scripts_from_db]
+
+    script = SelectField('Выберете скрипт', validators=[DataRequired()])
     select = SubmitField('Подтвердить выбор')
     order_number = SelectField('Выберете вид работ', validators=[DataRequired()])
