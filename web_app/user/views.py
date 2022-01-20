@@ -47,8 +47,9 @@ def process_registration():
                                                 email=registration_form.email.data)
         flash(message)
         return redirect(url_for('user.entrance'))
-
-    flash(registration_form.errors)
+    messages = [registration_form.errors[key][0] for key in registration_form.errors]
+    for message in messages:
+        flash(message)
     return redirect(url_for('user.registration'))
 
 

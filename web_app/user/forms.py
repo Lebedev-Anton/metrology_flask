@@ -10,9 +10,9 @@ from web_app.user.user_validators import \
 
 
 class EntranceForm(FlaskForm):
-    username = StringField('Имя пользователя', validators=[DataRequired()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    submit = SubmitField('Войти')
+    username = StringField('Имя пользователя', validators=[DataRequired()], render_kw={"class": "form-control"})
+    password = PasswordField('Пароль', validators=[DataRequired()], render_kw={"class": "form-control"})
+    submit = SubmitField('Войти', render_kw={"class": "btn btn-primary"})
 
 
 class RegistrationForm(FlaskForm):
@@ -22,11 +22,21 @@ class RegistrationForm(FlaskForm):
         allowed_position = [position[0] for position in positions_from_db]
         self.employee_position.choices = allowed_position
 
-    username = StringField('Введите имя пользователя', validators=[DataRequired(), validate_username])
-    password = PasswordField('Введите пароль', validators=[DataRequired(), validate_password])
-    repeated_password = PasswordField('Повторите пароль', validators=[DataRequired(), validate_password])
+    username = StringField('Введите имя пользователя',
+                           validators=[DataRequired(), validate_username],
+                           render_kw={"class": "form-control"})
+    password = PasswordField('Введите пароль',
+                             validators=[DataRequired(), validate_password],
+                             render_kw={"class": "form-control"})
+    repeated_password = PasswordField('Повторите пароль',
+                                      validators=[DataRequired(), validate_password],
+                                      render_kw={"class": "form-control"})
 
-    employee_position = SelectField('Введите должность', validators=[DataRequired(), validate_employee_position])
+    employee_position = SelectField('Введите должность',
+                                    validators=[DataRequired(), validate_employee_position],
+                                    render_kw={"class": "form-control"})
 
-    email = EmailField('Введите email', validators=[DataRequired(), validate_email])
-    submit = SubmitField('Зарегестрироваться')
+    email = EmailField('Введите email',
+                       validators=[DataRequired(), validate_email],
+                       render_kw={"class": "form-control"})
+    submit = SubmitField('Зарегестрироваться', render_kw={"class": "btn btn-primary"})

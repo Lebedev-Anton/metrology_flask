@@ -1,16 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
+<div class = "row">
+    <div class="col-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-warning" role="alert">
+                    {% for message in messages %}
+                        {{ message }}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         <form action="{{ url_for('user.process_entrance') }}" method="post">
             {{ form.hidden_tag() }}
-            <p>
-                {{ form.username.label }} <br> {{ form.username() }}
-            </p>
-            <p>
-                {{ form.password.label }} <br> {{ form.password() }}
-            </p>
+            <div class="form-group">
+                 <p>{{ form.username.label }} <br> {{ form.username() }}</p>
+                 <p>{{ form.password.label }} <br> {{ form.password() }}</p>
+            </div>
             <p> <a href = "{{ url_for('user.registration') }}" >Регистрация </a> </p>
-            <p>
-                {{ form.submit() }}
-            </p>
+            <p>{{ form.submit() }}</p>
         </form>
+    </div>
+ </div>
 {% endblock %}

@@ -1,0 +1,15 @@
+<html>
+    <body>
+        <div>
+            {% if current_user.is_authenticated %}
+            Metrology:
+                <a href="{{ url_for('index') }}">Выбор работ</a>
+                {% if current_user.is_head_of_laboratory %}
+                    <a href="{{ url_for('admin.index') }}">Панель администратора</a>
+                {% endif %}
+                <a href="{{ url_for('user.logout') }}">Выйти</a>
+                <hr>
+            {% endif %}
+        </div>
+    </body>
+</html>
