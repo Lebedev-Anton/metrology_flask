@@ -2,7 +2,6 @@ from web_app import db
 from web_app.user.models import Users, PositionsEmployees
 from web_app.admin.models import WorkType, AccessRights, Devices, WorkStatus
 from web_app.scripts.models import Scripts
-from config import Config
 
 # Для внесения тестовых данных в базу необходимо выполнить этот скрипт
 # Скрипт выполняется только после создания базы
@@ -32,7 +31,6 @@ def save_work_type_to_db(work_type_name):
 
 def save_script_to_db(work_type_name, script_name, path):
     id_wt = WorkType.query.filter_by(work_type_name=work_type_name).first().id
-    path = Config.BASE_PATH + path
     script = Scripts(id_wt=id_wt, script_name=script_name, path=path)
     db.session.add(script)
     db.session.commit()

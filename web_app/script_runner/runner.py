@@ -5,10 +5,12 @@ from web_app.script_runner.models import CheckedPoint, CheckedPointData
 from flask import redirect, url_for
 from web_app.forms import SelectScript
 from web_app.script_runner.enums import Status
+from config import Config
 
 
 def dynamic_import(module):
-    return importlib.import_module(module)
+    path_module = Config.BASE_PATH + module
+    return importlib.import_module(path_module)
 
 
 def isLoad(id):
