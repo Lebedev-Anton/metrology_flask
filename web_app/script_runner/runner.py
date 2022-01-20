@@ -3,7 +3,6 @@ import os
 from web_app import db
 from web_app.script_runner.models import CheckedPoint, CheckedPointData
 from flask import redirect, url_for
-from web_app.forms import SelectScript
 from web_app.script_runner.enums import Status
 from config import Config
 
@@ -91,5 +90,4 @@ def selection_checked_point(checked_point, path, type_selection):
 
 
 def stop_script():
-    form = SelectScript()
-    return redirect(url_for('index', form=form))
+    return redirect(url_for('index'))

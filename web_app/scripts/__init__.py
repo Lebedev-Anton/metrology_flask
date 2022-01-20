@@ -57,7 +57,3 @@ class BaseFunction:
     def get_checked_point_parameters(self):
         checked_point = CheckedPoint.query.filter_by(id=self.checked_point_id).first()
         return checked_point.checked_point_parameters
-
-    def stop_script(self):
-        form = SelectScript()
-        return redirect(url_for('index', form=form))
