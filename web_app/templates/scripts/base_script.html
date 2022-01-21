@@ -7,7 +7,7 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <script src="{{ url_for('static', filename='test.js') }}"></script>
+        <script src="{{ url_for('static', filename='expect_execution_task.js') }}"></script>
     </head>
     <body>
         <div>
@@ -15,8 +15,14 @@
         </div>
         <div class="container">
             <h2>{{ title }}</h2>
-            <div id="script_part">ЧАСТЬ СКРИПТА</div>
-            <div id="task_id">{{ task_id }}</div>
+            <div id="task_id" about="{{ task_id }}"></div>
+            <div class = "row">
+                <div class="col-6">
+                        <div class="tenor-gif-embed" data-postid="16705631" data-share-method="host" data-aspect-ratio="1.33333" data-width="30%">
+                        </div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+                </div>
+                <div class="col-3"></div>
+             </div>
             {% block content %}{% endblock %}
         </div>
         <!-- Optional JavaScript -->

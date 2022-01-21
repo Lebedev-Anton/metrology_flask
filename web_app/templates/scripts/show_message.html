@@ -1,4 +1,4 @@
-{% extends "scripts/base_script.html" %}
+{% extends "base.html" %}
 {% block content %}
         <form action="{{ url_for('script.processing_show_message',
          checked_point_id=checked_point_id, path=path) }}" method="post">
