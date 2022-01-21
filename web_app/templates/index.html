@@ -1,10 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-        <h1>Будет выбран скрипт из БД!</h1>
+<div class = "row">
+    <div class="col-4">
+        <h2>Выберете скрипт и вид работ</h2>
         <form action="{{ url_for('script_runner.start_script') }}" method="post" novalidate>
             {{ form.hidden_tag() }}
-            <p>{{ form.script() }}</p>
-            <p>{{ form.order_number() }}</p>
-            <p>{{ form.select() }}</p>
+            <div class="form-group">
+                <p>{{ form.script.label }} <br> {{ form.script() }}</p>
+                <p>{{ form.order_number.label }} <br> {{ form.order_number() }}</p>
+                <p>{{ form.select() }}</p>
+            </div>
         </form>
+    </div>
+</div>
 {% endblock %}

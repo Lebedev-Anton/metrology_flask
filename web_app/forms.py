@@ -17,6 +17,6 @@ class SelectScript(FlaskForm):
         scripts_from_db = Scripts.query.all()
         self.script.choices = [script.script_name for script in scripts_from_db]
 
-    script = SelectField('Выберете скрипт', validators=[DataRequired()])
-    select = SubmitField('Подтвердить выбор')
-    order_number = SelectField('Выберете вид работ', validators=[DataRequired()])
+    script = SelectField('Выберете скрипт', validators=[DataRequired()], render_kw={"class": "form-control"})
+    order_number = SelectField('Выберете вид работ', validators=[DataRequired()], render_kw={"class": "form-control"})
+    select = SubmitField('Подтвердить выбор', render_kw={"class": "btn btn-primary"})

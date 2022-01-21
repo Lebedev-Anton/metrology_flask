@@ -13,6 +13,19 @@
         <div>
             {% include 'menu.html' %}
         </div>
+        <div class = "row">
+            <div class="col-6">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="alert alert-warning" role="alert">
+                            {% for message in messages %}
+                                {{ message }}<br>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
         <div class="container">
             <h2>{{ title }}</h2>
             <div id="task_id" about="{{ task_id }}"></div>

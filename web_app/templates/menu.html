@@ -1,15 +1,24 @@
-<html>
-    <body>
-        <div>
-            {% if current_user.is_authenticated %}
-            Metrology:
-                <a href="{{ url_for('index') }}">Выбор работ</a>
-                {% if current_user.is_head_of_laboratory %}
-                    <a href="{{ url_for('admin.index') }}">Панель администратора</a>
-                {% endif %}
-                <a href="{{ url_for('user.logout') }}">Выйти</a>
-                <hr>
-            {% endif %}
-        </div>
-    </body>
-</html>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Metrology</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    {% if current_user.is_authenticated %}
+        <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('index') }}">Выбор работ <span class="sr-only">(current)</span></a>
+              </li>
+              {% if current_user.is_head_of_laboratory %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin.index') }}">Панель администратора</a>
+              </li>
+              {% endif %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('user.logout') }}">Выйти</a>
+              </li>
+        </ul>
+    {% endif %}
+  </div>
+</nav>

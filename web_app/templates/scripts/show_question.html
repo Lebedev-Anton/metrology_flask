@@ -1,10 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
+<div class = "row">
+    <div class="col-4">
         <form action="{{ url_for('script.processing_show_question', choice=choice,
          checked_point_id=checked_point_id, path=path) }}" method="post">
             {{ form.hidden_tag() }}
-            <p>{{ message }}</p>
-            <p>{{ form.choice() }}</p>
-            <p>{{ form.submit() }}</p>
+            <div class="form-group">
+                <p>{{ message }}</p>
+                <p>{{ form.choice() }}</p>
+                <p>{{ form.submit() }}</p>
+            </div>
         </form>
+    </div>
+</div>
 {% endblock %}

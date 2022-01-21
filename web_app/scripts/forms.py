@@ -4,17 +4,17 @@ from wtforms.validators import DataRequired
 
 
 class ShowMessageForm(FlaskForm):
-    submit = SubmitField('Ок')
+    submit = SubmitField('Ок', render_kw={"class": "btn btn-primary"})
 
 
 class ShowQuestionForm(FlaskForm):
     def __init__(self, user_choice, **kwargs):
         super().__init__(**kwargs)
         self.choice.choices = user_choice.split(';')
-    choice = SelectField(validators=[DataRequired()])
+    choice = SelectField(validators=[DataRequired()], render_kw={"class": "form-control"})
     submit = SubmitField('Ок')
 
 
 class ShowNumberForm(FlaskForm):
-    number = DecimalField(validators=[DataRequired()])
-    submit = SubmitField('Ок')
+    number = DecimalField(validators=[DataRequired()], render_kw={"class": "form-control"})
+    submit = SubmitField('Ок', render_kw={"class": "btn btn-primary"})
