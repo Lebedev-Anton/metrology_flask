@@ -1,4 +1,4 @@
-from flask import render_template, url_for, redirect, flash
+from flask import render_template, url_for, redirect, flash, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from web_app.forms import SelectScript
 from web_app.admin.models import Devices, WorkStatus
@@ -21,7 +21,8 @@ def start_script():
         script_path_for_import = Scripts.query.filter_by(script_name=form.script.data).first().path
         user_id = current_user.id
         celery_task = start_script_in_celery.delay(work_id, script_path_for_import, user_id)
-        return redirect(url_for('script_runner.task_status', task_id=celery_task.id))
+        # return redirect(url_for('script_runner.task_status', task_id=celery_task.id))
+        return render_template('scripts/base_script.html', task_id=celery_task.id)
     return render_template('index.html', form=form)
 
 
@@ -31,7 +32,8 @@ def run_script(checked_point_id, path):
         CheckedPointData.id_checked_point == checked_point_id).first()[0]
     user_id = current_user.id
     celery_task = run_script_in_celery.delay(work_id, path, user_id)
-    return redirect(url_for('script_runner.task_status', task_id=celery_task.id))
+    # return redirect(url_for('script_runner.task_status', task_id=celery_task.id))
+    return render_template('scripts/base_script.html', task_id=celery_task.id)
 
 
 @blueprint.route('/task_status/<task_id>', methods=['GET', 'POST'])
@@ -42,6 +44,16 @@ def task_status(task_id):
     elif task.state != 'FAILURE':
         return task.result
     return str(task.info)
+
+
+@blueprint.route('/expect_execution_task/<task_id>', methods=['GET', 'POST'])
+def expect_execution_task(task_id):
+    import time
+    time.sleep(3)
+    print('STATUS')
+    task = start_script_in_celery.AsyncResult(task_id)
+    print(task.state, task_id, task.result)
+    return jsonify({"state": task.state})
 
 
 @celery_app.task
