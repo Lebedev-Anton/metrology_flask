@@ -13,16 +13,19 @@ class BaseFunction:
         self.path = path
 
     def show_message(self, message):
-        return redirect(url_for('script.show_message', message=message,
-                                checked_point_id=self.checked_point_id, path=self.path))
+        page_content = {'message': message, 'path': self.path}
+        self._save_page_content_to_db(page_content)
+        return redirect(url_for('script.show_message', checked_point_id=self.checked_point_id))
 
     def show_question(self, message, choice):
-        return redirect(url_for('script.show_question', message=message, choice=choice,
-                                checked_point_id=self.checked_point_id, path=self.path))
+        page_content = {'message': message, 'path': self.path, 'choice': choice}
+        self._save_page_content_to_db(page_content)
+        return redirect(url_for('script.show_question', checked_point_id=self.checked_point_id))
 
     def show_number(self, message):
-        return redirect(url_for('script.show_number', message=message,
-                                checked_point_id=self.checked_point_id, path=self.path))
+        page_content = {'message': message, 'path': self.path}
+        self._save_page_content_to_db(page_content)
+        return redirect(url_for('script.show_number', checked_point_id=self.checked_point_id))
 
     def return_user_answer(self, method_name):
         checked_point_data = CheckedPointData.query.filter_by(
@@ -57,3 +60,9 @@ class BaseFunction:
     def get_checked_point_parameters(self):
         checked_point = CheckedPoint.query.filter_by(id=self.checked_point_id).first()
         return checked_point.checked_point_parameters
+
+    def _save_page_content_to_db(self, page_content_dict):
+        checked_point_data = CheckedPointData.query.filter_by(
+            id_checked_point=self.checked_point_id).order_by(CheckedPointData.id.desc()).first()
+        checked_point_data.page_content = str(page_content_dict)
+        db.session.commit()

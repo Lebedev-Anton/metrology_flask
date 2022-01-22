@@ -25,6 +25,7 @@ class CheckedPointData(db.Model):
     next_method = db.Column(db.Text)
     user_answer = db.Column(db.Text)
     status = db.Column(db.Text, default=Status.backlog.value)
+    page_content = db.Column(db.Text)
 
     def __repr__(self):
         return f'id - {self.id}, current_method - {self.current_method}, next_method - {self.next_method}'

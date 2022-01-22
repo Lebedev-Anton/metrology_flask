@@ -8,9 +8,14 @@ from flask import Blueprint
 blueprint = Blueprint('script', __name__, url_prefix='/script')
 
 
-@blueprint.route('/show_message/<message>-<checked_point_id>-<path>')
-def show_message(message, checked_point_id, path):
+@blueprint.route('/show_message/<checked_point_id>')
+def show_message(checked_point_id):
     if current_user.is_authenticated:
+        checked_point_data = CheckedPointData.query.filter_by(
+            id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
+        page_content = eval(checked_point_data.page_content)
+        message = page_content['message']
+        path = page_content['path']
         form = ShowMessageForm()
         return render_template('scripts/show_message.html', message=message,
                                form=form, checked_point_id=checked_point_id, path=path)
@@ -29,8 +34,14 @@ def processing_show_message(checked_point_id, path):
     return redirect(url_for('script_runner.run_script', checked_point_id=checked_point_id, path=path))
 
 
-@blueprint.route('/show_question/<message>-<choice>-<checked_point_id>-<path>')
-def show_question(message, choice, checked_point_id, path):
+@blueprint.route('/show_question/<checked_point_id>')
+def show_question(checked_point_id):
+    checked_point_data = CheckedPointData.query.filter_by(
+        id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
+    page_content = eval(checked_point_data.page_content)
+    message = page_content['message']
+    choice = page_content['choice']
+    path = page_content['path']
     if current_user.is_authenticated:
         form = ShowQuestionForm(choice)
         return render_template('scripts/show_question.html', message=message, choice=choice,
@@ -52,9 +63,14 @@ def processing_show_question(choice, checked_point_id, path):
     return redirect(url_for('script_runner.run_script', checked_point_id=checked_point_id, path=path))
 
 
-@blueprint.route('/show_number/<message>-<checked_point_id>-<path>')
-def show_number(message, checked_point_id, path):
+@blueprint.route('/show_number/<checked_point_id>')
+def show_number(checked_point_id):
     if current_user.is_authenticated:
+        checked_point_data = CheckedPointData.query.filter_by(
+            id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
+        page_content = eval(checked_point_data.page_content)
+        message = page_content['message']
+        path = page_content['path']
         form = ShowNumberForm()
         return render_template('scripts/show_number.html', message=message,
                                form=form, checked_point_id=checked_point_id, path=path)
