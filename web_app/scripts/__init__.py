@@ -1,7 +1,6 @@
 from web_app import db
 from web_app.script_runner.models import CheckedPointData, CheckedPoint
 from flask import redirect, url_for
-from web_app.forms import SelectScript
 from web_app.script_runner.enums import Status
 
 
