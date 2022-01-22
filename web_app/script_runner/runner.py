@@ -12,12 +12,12 @@ def dynamic_import(module):
     return importlib.import_module(path_module)
 
 
-def isLoad(id):
-    return CheckedPoint.query.filter_by(id_work=id).all()
+def is_load(work_id):
+    return CheckedPoint.query.filter_by(id_work=work_id).all()
 
 
 def load_checked_point_in_db(path, work_id):
-    if not isLoad(work_id):
+    if not is_load(work_id):
         CheckedPoint.query.filter_by(id_work=work_id).all()
         script_module = dynamic_import(path)
         script_path = os.path.dirname(script_module.__file__)
@@ -36,7 +36,7 @@ def load_checked_point_in_db(path, work_id):
                 db.session.commit()
 
 
-def run_checked_point(user_id, work_id, path):
+def run_checked_point(work_id, path):
     checked_point_in_progress = CheckedPoint.query.filter_by(id_work=work_id, status=Status.in_progress.value).order_by(
         CheckedPoint.id.asc()).first()
     if checked_point_in_progress:
@@ -55,7 +55,7 @@ def get_script_functions(path):
     return dynamic_import(path_of_script_functions)
 
 
-def isLastMethodInProgress(checked_point_id):
+def is_last_method_in_progress(checked_point_id):
     return CheckedPointData.query.filter_by(status=Status.in_progress.value, id_checked_point=checked_point_id).all()
 
 
@@ -69,7 +69,7 @@ def selection_checked_point(checked_point, path, type_selection):
     if type_selection == Status.backlog.value:
         next_method = current_function(checked_point_id, path).start_method
     else:
-        if isLastMethodInProgress(checked_point_id):
+        if is_last_method_in_progress(checked_point_id):
             in_progress_method = CheckedPointData.query.filter_by(
                 status=Status.in_progress.value, id_checked_point=checked_point_id).order_by(
                 CheckedPointData.id.desc()).first()

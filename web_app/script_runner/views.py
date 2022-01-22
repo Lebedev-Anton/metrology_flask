@@ -20,8 +20,7 @@ def start_script():
         work_id = db.session.query(WorkStatus.id).join(Devices).filter(
             Devices.order_number == form.order_number.data).first()[0]
         script_path_for_import = Scripts.query.filter_by(script_name=form.script.data).first().path
-        user_id = current_user.id
-        celery_task = start_script_in_celery.delay(work_id, script_path_for_import, user_id)
+        celery_task = start_script_in_celery.delay(work_id, script_path_for_import)
         title = "Loading..."
         return render_template('scripts/base_script.html', task_id=celery_task.id, title=title)
     return render_template('index.html', form=form)
@@ -31,8 +30,7 @@ def start_script():
 def run_script(checked_point_id, path):
     work_id = db.session.query(CheckedPoint.id_work).join(CheckedPointData).filter(
         CheckedPointData.id_checked_point == checked_point_id).first()[0]
-    user_id = current_user.id
-    celery_task = run_script_in_celery.delay(work_id, path, user_id)
+    celery_task = run_script_in_celery.delay(work_id, path)
     title = "Loading..."
     return render_template('scripts/base_script.html', task_id=celery_task.id, title=title)
 
