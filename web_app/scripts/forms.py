@@ -12,7 +12,7 @@ class ShowQuestionForm(FlaskForm):
         super().__init__(**kwargs)
         self.choice.choices = user_choice.split(';')
     choice = SelectField(validators=[DataRequired()], render_kw={"class": "form-control"})
-    submit = SubmitField('Ок')
+    submit = SubmitField('Ок', render_kw={"class": "btn btn-primary"})
 
 
 class ShowNumberForm(FlaskForm):
