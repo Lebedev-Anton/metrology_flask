@@ -60,30 +60,29 @@ def save_work_status(serial_number, user_name):
     db.session.commit()
 
 
-if __name__ == '__main__':
-    positions = ['Начальник лаборатории', 'Начальник сектора', 'Поверитель']
+positions = ['Начальник лаборатории', 'Начальник сектора', 'Поверитель']
 
-    save_positions_to_db(positions)
+save_positions_to_db(positions)
 
-    save_user_to_db('Вася', 'Начальник лаборатории', 'vasya@mail.ru', '12345678')
-    save_user_to_db('Петя', 'Начальник сектора', 'petya@mail.ru', '12345678')
-    save_user_to_db('Коля', 'Поверитель', 'Kolya@mail.ru', '12345678')
-    save_user_to_db('Иван', 'Поверитель', 'Ivan@mail.ru', '12345678')
+save_user_to_db('Вася', 'Начальник лаборатории', 'vasya@mail.ru', '12345678')
+save_user_to_db('Петя', 'Начальник сектора', 'petya@mail.ru', '12345678')
+save_user_to_db('Коля', 'Поверитель', 'Kolya@mail.ru', '12345678')
+save_user_to_db('Иван', 'Поверитель', 'Ivan@mail.ru', '12345678')
 
-    save_work_type_to_db('Поверка алкотестеров')
-    save_work_type_to_db('Поверка плотномеров')
+save_work_type_to_db('Поверка алкотестеров')
+save_work_type_to_db('Поверка плотномеров')
 
-    save_script_to_db('Поверка алкотестеров', 'Динго (49499-12)', 'breathalyzer.dingo_49499_12')
-    save_script_to_db('Поверка плотномеров', 'ПЛОТ-3 (78813-18)', 'densitometer.plot_3_78813_18')
+save_script_to_db('Поверка алкотестеров', 'Динго (49499-12)', 'breathalyzer.dingo_49499_12')
+save_script_to_db('Поверка плотномеров', 'ПЛОТ-3 (78813-18)', 'densitometer.plot_3_78813_18')
 
-    save_access_rights_to_db('Коля', 'Поверка алкотестеров')
-    save_access_rights_to_db('Коля', 'Поверка плотномеров')
-    save_access_rights_to_db('Иван', 'Поверка плотномеров')
+save_access_rights_to_db('Коля', 'Поверка алкотестеров')
+save_access_rights_to_db('Коля', 'Поверка плотномеров')
+save_access_rights_to_db('Иван', 'Поверка плотномеров')
 
-    save_devices_to_db('test-123', '5A24', 'мод-1', '2022-01-18 00:00:00', 'Поверка алкотестеров')
-    save_devices_to_db('test-242', '5A25', 'мод-2', '2022-01-18 00:00:00', 'Поверка алкотестеров')
-    save_devices_to_db('plot-13', '10', 'ПВД', '2022-01-18 00:00:00', 'Поверка плотномеров')
+save_devices_to_db('test-123', '5A24', 'мод-1', '2022-01-18 00:00:00', 'Поверка алкотестеров')
+save_devices_to_db('test-242', '5A25', 'мод-2', '2022-01-18 00:00:00', 'Поверка алкотестеров')
+save_devices_to_db('plot-13', '10', 'ПВД', '2022-01-18 00:00:00', 'Поверка плотномеров')
 
-    save_work_status('test-123', 'Коля')
-    save_work_status('test-242', 'Коля')
-    save_work_status('plot-13', 'Иван')
+save_work_status('test-123', 'Коля')
+save_work_status('test-242', 'Коля')
+save_work_status('plot-13', 'Иван')
