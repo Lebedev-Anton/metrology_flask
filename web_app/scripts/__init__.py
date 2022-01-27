@@ -1,5 +1,6 @@
 from web_app import db
 from web_app.script_runner.models import CheckedPointData, CheckedPoint
+from web_app.admin.models import WorkStatus
 from flask import redirect, url_for
 from web_app.script_runner.enums import Status
 
@@ -9,6 +10,12 @@ class BaseFunction:
 
     def __init__(self, checked_point_id, path):
         self.checked_point_id = checked_point_id
+        id_work = CheckedPoint.query.filter_by(id=self.checked_point_id).first().id_work
+        global_data = WorkStatus.query.filter_by(id=id_work).first().global_data
+        if global_data:
+            self.global_data = eval(global_data)
+        else:
+            self.global_data = dict()
         self.path = path
 
     def show_message(self, message):
@@ -30,6 +37,18 @@ class BaseFunction:
         page_content = {'table_config': table_config, 'path': self.path, 'message': message}
         self._save_page_content_to_db(page_content)
         return redirect(url_for('script.show_table', checked_point_id=self.checked_point_id))
+
+    def set_global_data(self, parameter_name, value):
+        self.global_data.update({parameter_name: value})
+        id_work = CheckedPoint.query.filter_by(id=self.checked_point_id).first().id_work
+        work_status = WorkStatus.query.filter_by(id=id_work).first()
+        work_status.global_data = str(self.global_data)
+        db.session.commit()
+
+    def get_global_data(self):
+        id_work = CheckedPoint.query.filter_by(id=self.checked_point_id).first().id_work
+        work_status = WorkStatus.query.filter_by(id=id_work).first()
+        return work_status.global_data
 
     def return_user_answer(self, method_name):
         checked_point_data = CheckedPointData.query.filter_by(

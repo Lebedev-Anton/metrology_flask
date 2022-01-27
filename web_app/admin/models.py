@@ -35,12 +35,13 @@ class WorkStatus(db.Model):
     id_device = db.Column(db.Integer, ForeignKey(Devices.id))
     work_status = db.Column(db.Text)
     user_id = db.Column(db.Integer, ForeignKey(Users.id))
+    global_data = db.Column(db.Text)
 
     user_data = relationship("UserData", lazy="joined")
     protocols = relationship("Protocols", lazy="joined")
 
     def __repr__(self):
-        return f'id - {self.id}, work_status - {self.work_status}'
+        return f'id - {self.id}, work_status - {self.work_status}, global_data - {self.global_data}'
 
 
 class AccessRights(db.Model):
