@@ -6,6 +6,7 @@ from web_app.script_runner.models import CheckedPointData
 from web_app.script_runner.enums import Status
 from flask import Blueprint
 from web_app.scripts.validators import is_allowed_to_this_work
+from flask import request
 
 blueprint = Blueprint('script', __name__, url_prefix='/script')
 
@@ -100,6 +101,40 @@ def processing_show_number(checked_point_id, path):
         checked_point_data = CheckedPointData.query.filter_by(
             id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
         checked_point_data.user_answer = user_answer
+        checked_point_data.status = Status.done.value
+        db.session.commit()
+        return redirect(url_for('script_runner.run_script', checked_point_id=checked_point_id, path=path))
+    return redirect(url_for('index'))
+
+
+@login_required
+@blueprint.route('/show_table/<checked_point_id>')
+def show_table(checked_point_id):
+    if is_allowed_to_this_work(checked_point_id):
+        checked_point_data = CheckedPointData.query.filter_by(
+            id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
+        page_content = eval(checked_point_data.page_content)
+        table_config = page_content['table_config']
+        path = page_content['path']
+        message = page_content['message']
+        form = ShowMessageForm()
+        return render_template('scripts/show_table.html',
+                               table_config=table_config, checked_point_id=checked_point_id,
+                               path=path, message=message, form=form)
+    return redirect(url_for('index'))
+
+
+@login_required
+@blueprint.route('/process-show_table/<checked_point_id>-<path>', methods=['POST'])
+def processing_show_table(checked_point_id, path):
+    if is_allowed_to_this_work(checked_point_id):
+        user_answer = {}
+        for form_name in request.form:
+            form_data = request.form.getlist(form_name)
+            user_answer.update({form_name: form_data[0]})
+        checked_point_data = CheckedPointData.query.filter_by(
+            id_checked_point=checked_point_id).order_by(CheckedPointData.id.desc()).first()
+        checked_point_data.user_answer = str(user_answer)
         checked_point_data.status = Status.done.value
         db.session.commit()
         return redirect(url_for('script_runner.run_script', checked_point_id=checked_point_id, path=path))

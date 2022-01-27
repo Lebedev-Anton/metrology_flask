@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="{{ url_for('script.processing_show_table',
+         checked_point_id=checked_point_id, path=path) }}" method="post">
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+            {% for header in table_config.headings %}
+                <th scope="col">{{ header }}</th>
+            {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in range(table_config.num_rows) %}
+            <tr>
+            {% for data in table_config.rows_data.get(row) %}
+                <td>
+                    {% if data is mapping %}
+                        {% if data.get('type') == 'choise' %}
+                            <select class="form-control" aria-label="Default select example" name="{{ data.get('name') }}">
+                                {% for select in data.get('value') %}
+                                    <option value="{{ select }}">{{ select }}</option>
+                                {% endfor %}
+                            </select>
+                        {% elif data.get('type') == 'input' %}
+                            <input class="form-control" id="number2" name="{{ data.get('name') }}" required step="any" type="number" value="">
+                        {% endif %}
+                    {% else %}
+                        {{ data }}
+                    {% endif %}
+                </td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p>{{ form.submit() }}</p>
+</form>
+{% endblock %}

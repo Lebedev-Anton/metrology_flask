@@ -26,6 +26,11 @@ class BaseFunction:
         self._save_page_content_to_db(page_content)
         return redirect(url_for('script.show_number', checked_point_id=self.checked_point_id))
 
+    def show_table(self, table_config, message=None):
+        page_content = {'table_config': table_config, 'path': self.path, 'message': message}
+        self._save_page_content_to_db(page_content)
+        return redirect(url_for('script.show_table', checked_point_id=self.checked_point_id))
+
     def return_user_answer(self, method_name):
         checked_point_data = CheckedPointData.query.filter_by(
             id_checked_point=self.checked_point_id, current_method=method_name).order_by(
