@@ -93,5 +93,5 @@ def selection_checked_point(checked_point, path, type_selection):
 def stop_script(work_id, path):
     visual, testing, meas = load_protocol_data_from_db(work_id)
     html = generate_html(visual, testing, meas, path)
-    save_html_to_pdf(work_id, html, '/home/anton/projects/protokol/')
+    save_html_to_pdf(work_id, html, '/protokol/')
     return redirect(url_for('script_runner.view_protokol', work_id=work_id))
