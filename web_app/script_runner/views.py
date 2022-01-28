@@ -1,7 +1,7 @@
-from flask import render_template, jsonify
+from flask import render_template, jsonify, send_from_directory
 from web_app.forms import SelectScript
 from web_app.admin.models import Devices, WorkStatus
-from web_app.scripts.models import Scripts
+from web_app.scripts.models import Scripts, Protocols
 from web_app.script_runner.models import CheckedPoint, CheckedPointData
 from flask_login import login_required
 from web_app import db
@@ -52,3 +52,18 @@ def task_status(task_id):
 def expect_execution_task(task_id):
     task = start_script_in_celery.AsyncResult(task_id)
     return jsonify({"state": task.state})
+
+
+@login_required
+@blueprint.route('/view_protokol/<work_id>', methods=['GET'])
+def view_protokol(work_id):
+    return render_template('scripts/view_protokol.html', work_id=work_id)
+
+
+@blueprint.route('/load_link/<work_id>', methods=['GET', 'POST'])
+def load_link(work_id):
+    protokol = Protocols.query.filter_by(id_work=work_id).first()
+    protokol_path = protokol.path
+    protokol_name = protokol.protocol_name
+    uploads = '/home/anton/projects/protokol/'
+    return send_from_directory(directory=uploads, filename=protokol_name, path=protokol_path)

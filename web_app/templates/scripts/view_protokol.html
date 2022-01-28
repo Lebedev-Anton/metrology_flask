@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Протокол с результатами поверки доступен по ссылке</h2>
+    <a href="{{ url_for('script_runner.load_link', work_id=work_id) }}">Скачать протокол</a>
+{% endblock %}

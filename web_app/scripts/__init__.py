@@ -3,6 +3,7 @@ from web_app.script_runner.models import CheckedPointData, CheckedPoint
 from web_app.admin.models import WorkStatus
 from flask import redirect, url_for
 from web_app.script_runner.enums import Status
+from web_app.scripts.models import UserData
 
 
 class BaseFunction:
@@ -83,6 +84,12 @@ class BaseFunction:
     def get_checked_point_parameters(self):
         checked_point = CheckedPoint.query.filter_by(id=self.checked_point_id).first()
         return checked_point.checked_point_parameters
+
+    def save_protocol_data(self, base_name, data):
+        id_work = CheckedPoint.query.filter_by(id=self.checked_point_id).first().id_work
+        user_data = UserData(id_work=id_work, base_name=base_name, path=str(data))
+        db.session.add(user_data)
+        db.session.commit()
 
     def _save_page_content_to_db(self, page_content_dict):
         checked_point_data = CheckedPointData.query.filter_by(

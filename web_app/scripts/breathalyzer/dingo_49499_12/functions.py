@@ -19,6 +19,17 @@ class Visual(BaseFunction):
         user_answer = eval(self.return_user_answer('preparation_device'))
         result_visual_1 = user_answer.get('choise_1')
         result_visual_2 = user_answer.get('choise_2')
+
+        protocol_data = {'name': 'Визуальный осмотр',
+                         'content': ['Царапины и повреждения на корпусе отсутвуют', result_visual_1]
+                         }
+        self.save_protocol_data('Visual', protocol_data)
+
+        protocol_data = {'name': 'Визуальный осмотр',
+                         'content': ['Внешний вид соответвует требованиям ОТ и МП', result_visual_2]
+                         }
+        self.save_protocol_data('Visual', protocol_data)
+
         if result_visual_1 == 'Соотв.' and result_visual_2 == 'Соотв.':
             return self.last_method()
         else:
@@ -55,6 +66,17 @@ class Testing(BaseFunction):
         user_answer = eval(self.return_user_answer('preparation_device'))
         result_visual_1 = user_answer.get('choise_1')
         result_visual_2 = user_answer.get('choise_2')
+
+        protocol_data = {'name': 'Опробование',
+                         'content': ['Прибор включается, на экране проявляется информация о приборе', result_visual_1]
+                         }
+        self.save_protocol_data('Testing', protocol_data)
+
+        protocol_data = {'name': 'Опробование',
+                         'content': ['Автоматически происходит забор пробы воздуха', result_visual_2]
+                         }
+        self.save_protocol_data('Visual', protocol_data)
+
         if result_visual_1 == 'Соотв.' and result_visual_2 == 'Соотв.':
             return self.last_method()
         else:
@@ -112,6 +134,13 @@ class Meas(BaseFunction):
             error = (input_1 + input_2 + input_3)/3 - nominal_value
         else:
             error = ((input_1 + input_2 + input_3)/3 - nominal_value)*100/nominal_value
+
+        protocol_data = {'name': 'Проверка метрологических характеристик',
+                         'content': [parameters[0], (input_1 + input_2 + input_3)/3, parameters[1],
+                                     error, parameters[2], 'Соотв.']
+                         }
+        self.save_protocol_data('Meas', protocol_data)
+
         if abs(error) < permissible_error:
             return self.last_method()
         else:

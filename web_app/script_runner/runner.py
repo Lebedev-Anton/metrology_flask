@@ -5,6 +5,7 @@ from web_app.script_runner.models import CheckedPoint, CheckedPointData
 from flask import redirect, url_for
 from web_app.script_runner.enums import Status
 from config import Config
+from web_app.report_generator.generator import load_protocol_data_from_db, generate_html, save_html_to_pdf
 
 
 def dynamic_import(module):
@@ -47,7 +48,7 @@ def run_checked_point(work_id, path):
     if checked_point_in_backlog:
         return selection_checked_point(checked_point_in_backlog, path, Status.backlog.value)
 
-    return stop_script()
+    return stop_script(work_id, path)
 
 
 def get_script_functions(path):
@@ -89,5 +90,8 @@ def selection_checked_point(checked_point, path, type_selection):
     return getattr(current_function(checked_point_id, path), next_method)()
 
 
-def stop_script():
-    return redirect(url_for('index'))
+def stop_script(work_id, path):
+    visual, testing, meas = load_protocol_data_from_db(work_id)
+    html = generate_html(visual, testing, meas, path)
+    save_html_to_pdf(work_id, html, '/home/anton/projects/protokol/')
+    return redirect(url_for('script_runner.view_protokol', work_id=work_id))
